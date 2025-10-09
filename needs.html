@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Share needs and offers at NG Kerk Wonderpark - Support each other in community.">
+  <title>Needs & Offers - NG Kerk Wonderpark</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="brand">NG Kerk Wonderpark</a>
+    <button class="hamburger-menu" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+      <li><a href="prayer.html"><i class="fas fa-praying-hands"></i> Prayer Requests</a></li>
+      <li><a href="needs.html" aria-current="page"><i class="fas fa-hand-holding-heart"></i> Needs & Offers</a></li>
+      <li><a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+      <li><a href="donate.html"><i class="fas fa-donate"></i> Donate</a></li>
+      <li><a href="volunteer.html"><i class="fas fa-users"></i> Volunteer</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="needs">
+      <h2><i class="fas fa-hand-holding-heart"></i> Needs & Offers</h2>
+      <p>NG Kerk Wonderpark thrives through fellowship, outreach, and service, uniting us as a 7-star congregation. Share your needs or offers to help build our community. Whether offering a skill, seeking assistance, or sharing resources, your contribution makes a lasting impact in our mission to serve and uplift one another. Need help? <a href="contact.html">Visit our Contact page</a>.</p>
+      <p class="guidelines">Please describe needs or offers clearly. Contact details are optional but helpful for coordination.</p>
+      <div class="needs-form">
+        <div class="radio-group">
+          <label><input type="radio" name="need-type" value="need" checked aria-label="Need"> Need</label>
+          <label><input type="radio" name="need-type" value="offer" aria-label="Offer"> Offer</label>
+        </div>
+        <input type="text" id="need-name" placeholder="Your Name (Optional)" aria-label="Your name">
+        <textarea id="need-details" placeholder="Describe your need or offer" required aria-label="Details"></textarea>
+        <input type="url" id="need-image" placeholder="Optional Image URL (e.g., https://example.com/image.jpg)" aria-label="Optional image URL">
+        <button onclick="submitNeed()"><i class="fas fa-plus"></i> Post</button>
+      </div>
+      <div id="featured-need">
+        <h3><i class="fas fa-star"></i> Featured Need or Offer</h3>
+        <ul id="needs-featured-list"></ul>
+      </div>
+      <ul id="needs-list"></ul>
+    </section>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-section social">
+          <h4>Follow Us</h4>
+          <ul class="social-links">
+            <li><a href="https://www.facebook.com/groups/ngkerkwonderpark/?ref=share&mibextid=KtfwRi" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+            <li><a href="https://www.instagram.com/ngkerkwonderpark?igsh=ODF2Z2xmMml0a2Yy" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+            <li><a href="https://youtube.com/@ngwonderparklive?si=Ol0UXdWu9rTR7b7r" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
+            <li><a href="https://www.ngkerkwonderpark.co.za/" target="_blank"><i class="fas fa-globe"></i> Website</a></li>
+          </ul>
+        </div>
+    
+        <div class="footer-divider"></div>
+    
+        <div class="footer-section contact">
+          <h4>Contact Us</h4>
+          <p><strong>Phone:</strong> 012 549 1340 / 012 006 0803</p>
+          <p><strong>Email:</strong> <a href="mailto:kantoor@ngkerkwonderpark.co.za">kantoor@ngkerkwonderpark.co.za</a></p>
+          <p><strong>Address:</strong> 1849 Berg Ave, Amandasig, Akasia, 0118</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2025 NG Kerk Wonderpark
+      </div>
+    </footer>   
+
+  <script src="scripts.js"></script>
+</body>
+</html>

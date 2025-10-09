@@ -1,0 +1,634 @@
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #1a3c5a, #4ca1af);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Main nav links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.nav-links li a:hover,
+.nav-links li a:focus,
+.nav-links li a.active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Auth links */
+.auth-links {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.btn-auth {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.2);
+    font-size: 0.95rem;
+    transition: background 0.3s ease;
+}
+
+.btn-auth:hover,
+.btn-auth:focus {
+    background-color: rgba(255,255,255,0.4);
+}
+
+.btn-signup {
+    background-color: #fff;
+    color: #1a3c5a;
+    font-weight: 600;
+}
+
+.btn-signup:hover,
+.btn-signup:focus {
+    background-color: #e0e0e0;
+}
+
+/* Hamburger Menu (mobile) */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.hamburger-menu span {
+    height: 3px;
+    width: 25px;
+    background: #fff;
+    margin: 4px 0;
+    border-radius: 5px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-links,
+    .auth-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #1a3c5a;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 1rem 0;
+    }
+
+    .nav-links.open,
+    .auth-links.open {
+        display: flex;
+    }
+
+    .hamburger-menu {
+        display: flex;
+    }
+
+    .auth-links {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+}
+
+/* Sections */
+section {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff url('https://images.unsplash.com/photo-1517486430290-6979eb1ebb64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') no-repeat center/cover;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+/* Forms */
+.announcement-form, .prayer-form, .needs-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.announcement-form input,
+.announcement-form textarea,
+.prayer-form input,
+.prayer-form textarea,
+.needs-form input,
+.needs-form textarea {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.announcement-form textarea,
+.prayer-form textarea,
+.needs-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.announcement-form button,
+.prayer-form button,
+.needs-form button {
+    align-self: flex-start;
+    cursor: pointer;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    background: #4ca1af;
+    color: #fff;
+    transition: background 0.3s, transform 0.2s;
+    font-size: 0.95rem;
+}
+
+.announcement-form button:hover,
+.prayer-form button:hover,
+.needs-form button:hover,
+.announcement-form button:focus,
+.prayer-form button:focus,
+.needs-form button:focus {
+    background: #2c3e50;
+    transform: translateY(-2px);
+}
+
+/* Form Buttons Container */
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.clear-button {
+    background: #e74c3c; /* Red for clear button */
+    color: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.clear-button:hover,
+.clear-button:focus {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Lists */
+#ann-list, #prayer-list, #needs-list, #prayer-featured-list, #needs-featured-list {
+    list-style: none;
+    padding: 0;
+}
+
+#ann-list li, #prayer-list li, #needs-list li, #prayer-featured-list li, #needs-featured-list li {
+    background: #f0f4f7;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#ann-list li::before, #prayer-list li::before, #needs-list li::before, #prayer-featured-list li::before, #needs-featured-list li::before {
+    content: '\f0a1';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #4ca1af;
+    margin-right: 0.5rem;
+    display: inline-block;
+}
+
+#ann-list img, #prayer-list img, #needs-list img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+#prayer-featured-list img, #needs-featured-list img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* Featured Sections */
+#featured-prayer, #featured-need {
+    margin-bottom: 2rem;
+}
+
+#featured-prayer h3, #featured-need h3 {
+    color: #2c3e50;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#prayer-featured-list li, #needs-featured-list li {
+    border: 3px solid #4ca1af;
+    background: #e6f0fa;
+    transition: transform 0.3s ease;
+}
+
+#prayer-featured-list li:hover, #needs-featured-list li:hover {
+    transform: translateY(-5px);
+}
+
+/* Share Buttons */
+.share-button {
+    cursor: pointer;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.share-button.facebook {
+    background: #3b5998; /* Facebook blue */
+}
+
+.share-button.instagram {
+    background: #e1306c; /* Instagram pink */
+}
+
+.share-button:hover,
+.share-button:focus {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Guidelines */
+.guidelines {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-left: 4px solid #4ca1af;
+    border-radius: 4px;
+}
+
+/* Contact Link */
+.contact-link {
+    color: #4ca1af;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.contact-link:hover,
+.contact-link:focus {
+    color: #2c3e50;
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Map Container */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Cards for Donate and Volunteer */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.action-card {
+    flex: 1 1 300px;
+    max-width: 400px;
+    border-radius: 12px;
+    border-color: rgb(0, 0, 0);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.432);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-card.donate {
+    background: #f7e1a1; /* Warm gold for Donate */
+}
+
+.action-card.volunteer {
+    background: #a8e6cf; /* Soft green for Volunteer */
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.action-card.donate:hover {
+    background: #e6c874; /* Darker gold on hover */
+}
+
+.action-card.volunteer:hover {
+    background: #81c7a6; /* Darker green on hover */
+}
+
+.action-card i {
+    color: #2c3e50; /* Dark color for contrast */
+    margin-bottom: 1rem;
+}
+
+.action-card h3 {
+    margin: 0.5rem 0 1rem;
+    font-size: 1.25rem;
+    color: #2c3e50; /* Dark color for contrast */
+}
+
+.action-card p {
+    font-size: 1rem;
+    color: #2c3e50; /* Dark color for contrast */
+    margin-bottom: 1.5rem;
+}
+
+.card-button {
+    display: inline-block;
+    background: #4ca1af;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.card-button:hover,
+.card-button:focus {
+    background: #2c3e50;
+    transform: translateY(-2px);
+}
+
+/* footer */
+footer {
+    background-color: #1a3c5a;
+    color: #fff;
+    padding: 3rem 1rem 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.95rem;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-bottom: 3px solid #4ca1af;
+    display: inline-block;
+    padding-bottom: 0.4rem;
+}
+
+.social-links {
+    list-style: none;      /* remove bullets */
+    padding-left: 0;       /* remove default indentation */
+    margin-top: 0.5rem;    /* small spacing under heading */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;           /* spacing between links */
+}
+
+.social-links li {
+    margin: 0;             /* remove default margins */
+}
+
+.social-links a {
+    color: #fff;
+    text-decoration: none;
+    display: block;        /* make the whole line clickable */
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #4ca1af;
+    transform: translateX(5px);
+}
+
+.footer-section p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #4ca1af;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.footer-divider {
+    width: 2px;
+    background-color: #4ca1af;
+    margin: 0 2rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    border-top: 1px solid #4ca1af;
+    padding-top: 1rem;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-divider {
+        display: none;
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-divider {
+        display: none;
+    }
+    .social-links li, .footer-section p {
+        font-size: 0.95rem;
+    }
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #1a3c5a;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 1rem 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .hamburger-menu {
+        display: flex;
+    }
+
+    .map-container {
+        height: 300px;
+    }
+
+    .announcement-form button,
+    .prayer-form button,
+    .needs-form button,
+    .clear-button,
+    .share-button {
+        align-self: stretch;
+    }
+
+    #prayer-featured-list img,
+    #needs-featured-list img {
+        max-width: 200px;
+    }
+
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-card {
+        flex: 1 1 100%;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand {
+        font-size: 1.5rem;
+    }
+
+    .nav-links li a {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+
+    section {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}

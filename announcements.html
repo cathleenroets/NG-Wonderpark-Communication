@@ -1,0 +1,59 @@
+<!-- announcements.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Announcements from NG Kerk Wonderpark - Stay updated on church news and events.">
+  <title>Announcements - NG Kerk Wonderpark</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="brand">NG Kerk Wonderpark</a>
+    <button class="hamburger-menu" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="announcements.html" aria-current="page"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+      <li><a href="prayer.html"><i class="fas fa-praying-hands"></i> Prayer Requests</a></li>
+      <li><a href="needs.html"><i class="fas fa-hand-holding-heart"></i> Needs & Offers</a></li>
+      <li><a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+      <li><a href="donate.html"><i class="fas fa-donate"></i> Donate</a></li>
+      <li><a href="volunteer.html"><i class="fas fa-users"></i> Volunteer</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="announcements">
+      <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+      <p>NG Kerk Wonderpark is a 7-star congregation living in the Kingdom of God through pastoral care, fellowship, outreach, discipleship, worship, healing, and service. Stay updated on our latest news, services, and community events.</p>
+      <div class="announcement-form">
+        <input type="text" id="ann-title" placeholder="Announcement Title" required aria-label="Announcement title">
+        <textarea id="ann-body" placeholder="Write your announcement..." required aria-label="Announcement body"></textarea>
+        <input type="url" id="ann-image" placeholder="Optional Image URL" aria-label="Optional image URL">
+        <button onclick="addAnnouncement()"><i class="fas fa-plus"></i> Post Announcement</button>
+      </div>
+      <ul id="ann-list"></ul>
+    </section>
+
+  <footer>
+    <p>Follow us: 
+      <a href="https://www.facebook.com/groups/ngkerkwonderpark/?ref=share&mibextid=KtfwRi" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com/ngkerkwonderpark?igsh=ODF2Z2xmMml0a2Yy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.youtube.com/channel/UCf5XjEXJbxKvePdG8xYqkPQ" target="_blank"><i class="fab fa-youtube"></i></a>
+    </p>
+    <p>Contact us: Phone: 012 549 1340 / 012 006 0803 | Email: <a href="mailto:kantoor@ngkerkwonderpark.co.za">kantoor@ngkerkwonderpark.co.za</a> | Address: 1849 Berg Ave, Amandasig, Akasia, 0118</p>
+    <p>&copy; 2025 NG Kerk Wonderpark</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
