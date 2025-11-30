@@ -11,39 +11,46 @@
   color: #fff;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;           
+  gap: 0.8rem;         
 }
 
 .brand {
-  color: #fff;
   font-size: 1.55rem;
   font-weight: 700;
+  color: #fff;
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Auth buttons – visible on mobile & desktop */
+/* Buttons side-by-side on mobile AND desktop */
 .auth-links {
   display: flex;
-  gap: 0.65rem;
-  flex-direction: column;   
+  flex-direction: row;        
+  gap: 0.9rem;
   align-items: center;
-  flex-grow: 1;
-  justify-content: center;
-  margin-left: -3rem;
 }
 
 .btn-auth {
-  padding: 0.62rem 1.2rem;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.18);
-  font-size: 0.96rem;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.16);
+  font-size: 0.93rem;
   font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+  min-width: 78px;
+  text-align: center;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.btn-auth:hover { background: rgba(255,255,255,0.3); }
+.btn-auth:hover {
+  background: rgba(255,255,255,0.32);
+  transform:hover {
+  transform: translateY(-1px);
+}
+}
 
 .btn-signup {
   background: #fff;
@@ -52,37 +59,39 @@
   box-shadow: 0 3px 8px rgba(0,0,0,0.18);
 }
 
-.btn-signup:hover { background: #f0f0f0; }
-
-/* Hamburger stays on the far right */
-.hamburger {
-  flex-shrink: 0;
-  margin-left: 1rem;
+.btn-signup:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
 }
 
-/* DESKTOP: horizontal buttons */
+/* Hamburger */
+.hamburger {
+  flex-shrink: 0;
+}
+
+/* Desktop */
 @media (min-width: 769px) {
-  .navbar { 
+  .navbar {
     padding: 1rem 3rem;
-    gap: 1rem 2rem;
+    gap: 1.2rem;
   }
-  .auth-links {
-    flex-grow: 0;           
-    margin-left: 0;
+  .brand { font-size: 1.85rem; }
+  .auth-links { gap: 1.2rem; }
+  .btn-auth {
+    padding: 0.62rem 1.4rem;
+    font-size: 1rem;
   }
 }
 
 /* Tiny phones – make it even tighter if needed */
 @media (max-width: 380px) {
   .navbar { padding: 0.9rem 1rem; }
-  .brand { font-size: 1.38rem; }
-  .auth-links { 
-    gap: 0.55rem;
-    margin-left: -2rem;     
-  }
-  .btn-auth { 
-    font-size: 0.92rem; 
-    padding: 0.55rem 1rem; 
+  .brand { font-size: 1.4rem; }
+  .auth-links { gap: 0.7rem; }
+  .btn-auth {
+    padding: 0.48rem 0.9rem;
+    font-size: 0.9rem;
+    min-width: 72px;
   }
 }
   
@@ -579,7 +588,7 @@ footer {
   color: white;
 }
 
-.eft-footer {
+.left-footer {
   text-align: center;
   margin-top: 1.2rem;
   color: #666;
