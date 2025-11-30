@@ -527,9 +527,10 @@ footer {
   }
   
   .footer-section.social {
-    margin-top: -0,5rem; 
-    margin-left: 2rem;
-  }
+    margin-top: -0.5rem; 
+    margin-left: 0; 
+    text-align: center; 
+}
   
   .footer-section h4 {
     margin-bottom: 1rem;
@@ -623,7 +624,7 @@ footer {
 }
 
 .title {
-  font-size: 2 rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #1a3c5a;
   text-align: left;
@@ -730,7 +731,3 @@ footer {
   margin-top: 1.2rem;
   color: #666;
 }
-
-
-
-
