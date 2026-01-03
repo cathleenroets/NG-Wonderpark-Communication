@@ -3,36 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sign in to NG Kerk Wonderpark - Access member features.">
-  <title>Sign In - NG Church Wonderpark</title>
+  <meta name="description" content="Announcements from NG Kerk Wonderpark - Stay updated on church news and events.">
+  <title class="titles">Prayers - NG Church Wonderpark</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hamburgers/1.2.1/hamburgers.min.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <div class="left-section">
-      <a href="index.html" class="brand">NG Church Wonderpark</a>
-      <div class="auth-links">
-        <a href="signin.html" class="btn-auth" class="active">Sign In</a>
-        <a href="signup.html" class="btn-auth btn-signup">Sign Up</a>
-      </div>
+    <a href="index.html" class="brand">NG Church Wonderpark</a>
+  
+    <!-- Auth buttons are now in the middle – visible on mobile, never hidden under hamburger -->
+    <div class="auth-links">
+      <a href="signin.html" class="btn-auth">Sign In</a>
+      <a href="signup.html" class="btn-auth btn-signup">Sign Up</a>
     </div>
-    <button class="hamburger hamburger--spin" id="menu-button" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+  
+    <!-- Hamburger stays on the far right -->
+    <button class="hamburger hamburger--spin" id="menu-button" type="button" 
+            aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
       <span class="hamburger-box">
         <span class="hamburger-inner"></span>
       </span>
     </button>
+  
     <ul class="nav-links" id="nav-links" aria-hidden="true">
-      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
-      <li><a href="prayer.html"><i class="fas fa-praying-hands"></i> Prayer Requests</a></li>
-      <li><a href="needs.html"><i class="fas fa-hand-holding-heart"></i> Needs & Offers</a></li>
-      <li><a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
-      <li><a href="donate.html"><i class="fas fa-donate"></i> Donate</a></li>
-      <li><a href="volunteer.html"><i class="fas fa-users"></i> Volunteer</a></li>
-      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="announcements.html">Announcements</a></li>
+      <li><a href="prayer.html">Prayer Requests</a></li>
+      <li><a href="needs.html">Needs & Offers</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="donate.html">Donate</a></li>
+      <li><a href="volunteer.html">Volunteer</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
+  
     <div class="menu-overlay" id="menu-overlay"></div>
   </nav>
 
@@ -75,4 +80,3 @@
   <script src="scripts.js"></script>
 </body>
 </html>
-
