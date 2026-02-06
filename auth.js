@@ -1,9 +1,8 @@
 // Firebase Auth setup using CDN modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } 
-  from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-// Your Firebase project configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCMQ2Scn4Bwe3LreQ3X9_6dCuEBK8cR2YI",
   authDomain: "kerk-c847c.firebaseapp.com",
@@ -17,48 +16,103 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Sign Up
-const signupForm = document.getElementById("signup-form");
-if (signupForm) {
-  signupForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
+// Update navbar based on auth state
+onAuthStateChanged(auth, (user) => {
+  const authLinks = document.querySelector('.auth-links');
+  if (authLinks) {
+    if (user) {
+      authLinks.innerHTML = `
+        <span>Welcome, ${user.displayName || 'Member'}</span>
+        <button id="logout-btn" class="btn-auth">Sign Out</button>
+      `;
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            await signOut(auth);
+            alert('👋 Logged out successfully!');
+            window.location.href = 'signin.html';
+          } catch (error) {
+            alert('⚠️ ' + error.message);
+          }
+        });
+      }
+    } else {
+      authLinks.innerHTML = `
+        <a href="signin.html" class="btn-auth">Sign In</a>
+        <a href="signup.html" class="btn-auth btn-signup">Sign Up</a>
+      `;
+    }
+  }
+});
 
+// Sign Up
+const signupForm = document.getElementById('signup-form');
+if (signupForm) {
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('signup-username')?.value.trim();
+    const email = document.getElementById('signup-email')?.value.trim();
+    const password = document.getElementById('signup-password')?.value.trim();
+    const signupBtn = document.getElementById('signup-btn');
+
+    if (!username || !email || !password) {
+      alert('⚠️ Please fill in all fields.');
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert('⚠️ Please enter a valid email address.');
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('⚠️ Password must be at least 6 characters.');
+      return;
+    }
+
+    signupBtn.disabled = true;
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("🎉 Account created successfully!");
-      window.location.href = "index.html";
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: username });
+      alert('🎉 Account created successfully!');
+      window.location.href = 'index.html';
     } catch (error) {
-      alert("⚠️ " + error.message);
+      alert('⚠️ ' + error.message);
+    } finally {
+      signupBtn.disabled = false;
     }
   });
 }
 
 // Sign In
-const signinForm = document.getElementById("signin-form");
+const signinForm = document.getElementById('signin-form');
 if (signinForm) {
-  signinForm.addEventListener("submit", async (e) => {
+  signinForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById("signin-email").value;
-    const password = document.getElementById("signin-password").value;
+    const email = document.getElementById('signin-email')?.value.trim();
+    const password = document.getElementById('signin-password')?.value.trim();
+    const signinBtn = document.getElementById('signin-btn');
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("✅ Signed in successfully!");
-      window.location.href = "index.html";
-    } catch (error) {
-      alert("⚠️ " + error.message);
+    if (!email || !password) {
+      alert('⚠️ Please fill in all fields.');
+      return;
     }
-  });
-}
 
-// (Optional) Sign Out button logic
-const logoutBtn = document.getElementById("logout-btn");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-    alert("👋 Logged out successfully!");
-    window.location.href = "signin.html";
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert('⚠️ Please enter a valid email address.');
+      return;
+    }
+
+    signinBtn.disabled = true;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      alert(`✅ Welcome back, ${userCredential.user.displayName || 'Member'}!`);
+      window.location.href = 'index.html';
+    } catch (error) {
+      alert('⚠️ ' + error.message);
+    } finally {
+      signinBtn.disabled = false;
+    }
   });
 }
