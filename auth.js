@@ -31,25 +31,27 @@ onAuthStateChanged(auth, (user) => {
   const authLinks = document.querySelector(".auth-links");
   const adminLink = document.querySelector(".admin-link");
 
-  // Hide admin link by default
+  // Always hide admin link first
   if (adminLink) {
     adminLink.style.display = "none";
   }
 
-  if (authLinks) {
-    if (user) {
+  if (user) {
+    const userEmail = user.email ? user.email.toLowerCase() : "";
 
-      // Show admin link if admin
-      if (adminLink && adminEmails.includes(user.email)) {
-        adminLink.style.display = "block";
-      }
+    // Show admin link if admin
+    if (adminLink && adminEmails.includes(userEmail)) {
+      adminLink.style.display = "block";
+    }
 
+    if (authLinks) {
       authLinks.innerHTML = `
         <span>Welcome, ${user.displayName || "Member"}</span>
         <button id="logout-btn" class="btn-auth">Sign Out</button>
       `;
 
       const logoutBtn = document.getElementById("logout-btn");
+
       if (logoutBtn) {
         logoutBtn.addEventListener("click", async () => {
           try {
@@ -61,8 +63,11 @@ onAuthStateChanged(auth, (user) => {
           }
         });
       }
+    }
 
-    } else {
+  } else {
+    // User is logged out
+    if (authLinks) {
       authLinks.innerHTML = `
         <a href="signin.html" class="btn-auth">Sign In</a>
         <a href="signup.html" class="btn-auth btn-signup">Sign Up</a>
@@ -73,6 +78,7 @@ onAuthStateChanged(auth, (user) => {
 
 // Sign Up
 const signupForm = document.getElementById("signup-form");
+
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -97,24 +103,28 @@ if (signupForm) {
       return;
     }
 
-    signupBtn.disabled = true;
+    if (signupBtn) signupBtn.disabled = true;
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
       await updateProfile(userCredential.user, { displayName: username });
 
       alert("🎉 Account created successfully!");
       window.location.href = "index.html";
+
     } catch (error) {
       alert("⚠️ " + error.message);
+
     } finally {
-      signupBtn.disabled = false;
+      if (signupBtn) signupBtn.disabled = false;
     }
   });
 }
 
 // Sign In
 const signinForm = document.getElementById("signin-form");
+
 if (signinForm) {
   signinForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -128,16 +138,19 @@ if (signinForm) {
       return;
     }
 
-    signinBtn.disabled = true;
+    if (signinBtn) signinBtn.disabled = true;
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
       alert(`✅ Welcome back, ${userCredential.user.displayName || "Member"}!`);
       window.location.href = "index.html";
+
     } catch (error) {
       alert("⚠️ " + error.message);
+
     } finally {
-      signinBtn.disabled = false;
+      if (signinBtn) signinBtn.disabled = false;
     }
   });
 }
