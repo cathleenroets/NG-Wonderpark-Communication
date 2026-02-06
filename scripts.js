@@ -26,6 +26,42 @@ function escapeHTML(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
+// Email notification function (uses EmailJS or similar service)
+async function sendEmailNotification(type, content) {
+  const adminEmail = localStorage.getItem('adminEmail') || 'cathleen.roets@gmail.com';
+  const emailEnabled = localStorage.getItem('emailNotifications') !== 'false';
+  
+  if (!emailEnabled) return;
+
+  // Construct email body
+  const subject = `New ${type} Submission - Pending Approval`;
+  const body = `
+    New ${type} submission requires your approval:
+    
+    ${JSON.stringify(content, null, 2)}
+    
+    Please log in to the admin panel to review and approve this submission.
+    ${window.location.origin}/admin.html
+  `;
+
+  // In a real implementation, you would use EmailJS, SendGrid, or a backend API
+  // For demo purposes, we'll show a console log
+  console.log('Email Notification:', { to: adminEmail, subject, body });
+  
+  // Example EmailJS implementation (requires setup):
+  /*
+  emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+    to_email: adminEmail,
+    subject: subject,
+    message: body,
+  }).then(function(response) {
+    console.log('Email sent successfully!', response);
+  }, function(error) {
+    console.log('Email send failed:', error);
+  });
+  */
+}
+
 // Hamburger Menu
 const menuBtn = document.getElementById('menu-button');
 const navLinks = document.getElementById('nav-links');
@@ -59,7 +95,6 @@ if (menuBtn && navLinks && overlay) {
   });
 }
 
-
 // ANNOUNCEMENTS
 function addAnnouncement() {
   const titleEl = document.getElementById('ann-title');
@@ -84,17 +119,36 @@ function addAnnouncement() {
   }
 
   submitBtn.disabled = true;
-  const announcements = getFromLocalStorage('announcements');
-  announcements.push({ title, body, image, date: new Date().toISOString() });
-  saveToLocalStorage('announcements', announcements);
-  renderAnnouncements();
+  
+  // Get current user from auth
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const userName = currentUser.displayName || 'Anonymous';
+  
+  const announcement = {
+    id: Date.now(),
+    title,
+    body,
+    image,
+    date: new Date().toISOString(),
+    status: 'pending',
+    type: 'announcement',
+    submittedBy: userName
+  };
+
+  // Save to pending queue
+  const pending = getFromLocalStorage('pendingApprovals');
+  pending.push(announcement);
+  saveToLocalStorage('pendingApprovals', pending);
+
+  // Send email notification
+  sendEmailNotification('Announcement', announcement);
 
   titleEl.value = '';
   bodyEl.value = '';
   if (imageEl) imageEl.value = '';
   submitBtn.disabled = false;
 
-  alert('Announcement posted successfully!');
+  alert('Announcement submitted! It will be visible after admin approval.');
 }
 
 function renderAnnouncements() {
@@ -102,7 +156,16 @@ function renderAnnouncements() {
   if (!list) return;
 
   list.innerHTML = '';
-  const announcements = getFromLocalStorage('announcements').sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  // Only show approved announcements
+  const announcements = getFromLocalStorage('announcements')
+    .filter(item => item.status === 'approved')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (announcements.length === 0) {
+    list.innerHTML = '<li>No announcements yet.</li>';
+    return;
+  }
 
   announcements.forEach(item => {
     const li = document.createElement('li');
@@ -118,7 +181,6 @@ function submitPrayer() {
   const nameEl = document.getElementById('prayer-name');
   const msgEl = document.getElementById('prayer-msg');
   const imageEl = document.getElementById('prayer-image');
-  const privateEl = document.getElementById('prayer-private');
   const submitBtn = document.querySelector('.prayer-form button');
 
   if (!msgEl) return;
@@ -126,7 +188,6 @@ function submitPrayer() {
   const name = escapeHTML((nameEl ? nameEl.value.trim() : '') || 'Anonymous');
   const msg = escapeHTML(msgEl.value.trim());
   let image = (imageEl ? imageEl.value.trim() : '') || DEFAULT_PRAYER_IMAGE;
-  const isPrivate = privateEl ? privateEl.checked : false;
 
   if (!msg) {
     alert('Please describe your prayer request.');
@@ -139,54 +200,53 @@ function submitPrayer() {
   }
 
   submitBtn.disabled = true;
-  const prayers = getFromLocalStorage('prayers');
-  prayers.push({ name, msg, image, private: isPrivate, date: new Date().toISOString() });
-  saveToLocalStorage('prayers', prayers);
-  renderPrayers();
+  
+  const prayer = {
+    id: Date.now(),
+    name,
+    msg,
+    image,
+    date: new Date().toISOString(),
+    status: 'pending',
+    type: 'prayer'
+  };
+
+  const pending = getFromLocalStorage('pendingApprovals');
+  pending.push(prayer);
+  saveToLocalStorage('pendingApprovals', pending);
+
+  sendEmailNotification('Prayer Request', prayer);
 
   if (nameEl) nameEl.value = '';
   msgEl.value = '';
   if (imageEl) imageEl.value = '';
-  if (privateEl) privateEl.checked = false;
   submitBtn.disabled = false;
 
-  alert('Prayer request submitted successfully!');
+  alert('Prayer request submitted! It will be visible after admin approval.');
 }
 
 function renderPrayers() {
   const list = document.getElementById('prayer-list');
-  const featuredList = document.getElementById('prayer-featured-list');
-  if (!list || !featuredList) return;
+  if (!list) return;
 
   list.innerHTML = '';
-  featuredList.innerHTML = '';
+  
+  const prayers = getFromLocalStorage('prayers')
+    .filter(item => item.status === 'approved' && !item.private)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const prayers = getFromLocalStorage('prayers').sort((a, b) => new Date(b.date) - new Date(a.date));
-  let featuredAdded = false;
+  if (prayers.length === 0) {
+    list.innerHTML = '<li>No prayer requests yet.</li>';
+    return;
+  }
 
   prayers.forEach((item, index) => {
-    if (!item.private) {
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${item.name}</strong> (${new Date(item.date).toLocaleString()}): ${item.msg}`;
-      if (item.image) {
-        li.innerHTML += `<br><img src="${item.image}" alt="Prayer request image" loading="lazy" style="max-width: 100%; height: auto;">`;
-      }
-
-      ['facebook', 'instagram'].forEach(platform => {
-        const btn = document.createElement('button');
-        btn.className = `share-button ${platform}`;
-        btn.innerHTML = `<i class="fab fa-${platform}"></i> Share`;
-        btn.addEventListener('click', () => sharePrayer(index, platform));
-        li.appendChild(btn);
-      });
-
-      if (!featuredAdded) {
-        featuredList.appendChild(li.cloneNode(true));
-        featuredAdded = true;
-      } else {
-        list.appendChild(li);
-      }
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${item.name}</strong> (${new Date(item.date).toLocaleString()}): ${item.msg}`;
+    if (item.image && item.image !== DEFAULT_PRAYER_IMAGE) {
+      li.innerHTML += `<br><img src="${item.image}" alt="Prayer request image" loading="lazy" style="max-width: 100%; height: auto;">`;
     }
+    list.appendChild(li);
   });
 }
 
@@ -216,10 +276,23 @@ function submitNeed() {
   }
 
   submitBtn.disabled = true;
-  const needs = getFromLocalStorage('needs');
-  needs.push({ type, name, details, image, date: new Date().toISOString() });
-  saveToLocalStorage('needs', needs);
-  renderNeeds();
+  
+  const need = {
+    id: Date.now(),
+    type,
+    name,
+    details,
+    image,
+    date: new Date().toISOString(),
+    status: 'pending',
+    type: 'need'
+  };
+
+  const pending = getFromLocalStorage('pendingApprovals');
+  pending.push(need);
+  saveToLocalStorage('pendingApprovals', pending);
+
+  sendEmailNotification('Need/Offer', need);
 
   if (nameEl) nameEl.value = '';
   detailsEl.value = '';
@@ -227,41 +300,32 @@ function submitNeed() {
   typeEls[0].checked = true;
   submitBtn.disabled = false;
 
-  alert('Your need or offer has been posted!');
+  alert('Your submission has been received! It will be visible after admin approval.');
 }
 
 function renderNeeds() {
   const list = document.getElementById('needs-list');
-  const featuredList = document.getElementById('needs-featured-list');
-  if (!list || !featuredList) return;
+  if (!list) return;
 
   list.innerHTML = '';
-  featuredList.innerHTML = '';
+  
+  const needs = getFromLocalStorage('needs')
+    .filter(item => item.status === 'approved')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const needs = getFromLocalStorage('needs').sort((a, b) => new Date(b.date) - new Date(a.date));
-  let featuredAdded = false;
+  if (needs.length === 0) {
+    list.innerHTML = '<li>No needs or offers yet.</li>';
+    return;
+  }
 
-  needs.forEach((item, index) => {
+  needs.forEach(item => {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${item.type.toUpperCase()} - ${item.name}</strong> (${new Date(item.date).toLocaleString()}): ${item.details}`;
-    if (item.image) {
-      li.innerHTML += `<br><img src="${item.image}" alt="${item.type} image" loading="lazy" style="max-width: 100%; height: auto;">`;
+    const typeLabel = item.needType ? item.needType.toUpperCase() : 'ITEM';
+    li.innerHTML = `<strong>${typeLabel} - ${item.name}</strong> (${new Date(item.date).toLocaleString()}): ${item.details}`;
+    if (item.image && item.image !== DEFAULT_NEED_IMAGE) {
+      li.innerHTML += `<br><img src="${item.image}" alt="${item.needType} image" loading="lazy" style="max-width: 100%; height: auto;">`;
     }
-
-    ['facebook', 'instagram'].forEach(platform => {
-      const btn = document.createElement('button');
-      btn.className = `share-button ${platform}`;
-      btn.innerHTML = `<i class="fab fa-${platform}"></i> Share`;
-      btn.addEventListener('click', () => shareNeed(index, platform));
-      li.appendChild(btn);
-    });
-
-    if (!featuredAdded) {
-      featuredList.appendChild(li.cloneNode(true));
-      featuredAdded = true;
-    } else {
-      list.appendChild(li);
-    }
+    list.appendChild(li);
   });
 }
 
@@ -296,10 +360,23 @@ function addEvent() {
   }
 
   submitBtn.disabled = true;
-  const events = getFromLocalStorage('events');
-  events.push({ title, date, image, link });
-  saveToLocalStorage('events', events);
-  renderEvents();
+  
+  const event = {
+    id: Date.now(),
+    title,
+    date,
+    image,
+    link,
+    status: 'pending',
+    type: 'event',
+    submittedDate: new Date().toISOString()
+  };
+
+  const pending = getFromLocalStorage('pendingApprovals');
+  pending.push(event);
+  saveToLocalStorage('pendingApprovals', pending);
+
+  sendEmailNotification('Event', event);
 
   titleEl.value = '';
   dateEl.value = '';
@@ -307,7 +384,7 @@ function addEvent() {
   if (linkEl) linkEl.value = '';
   submitBtn.disabled = false;
 
-  alert('Event added successfully!');
+  alert('Event submitted! It will be visible after admin approval.');
 }
 
 function renderEvents() {
@@ -315,7 +392,15 @@ function renderEvents() {
   if (!list) return;
 
   list.innerHTML = '';
-  const events = getFromLocalStorage('events').sort((a, b) => new Date(a.date) - new Date(b.date));
+  
+  const events = getFromLocalStorage('events')
+    .filter(item => item.status === 'approved')
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  if (events.length === 0) {
+    list.innerHTML = '<li>No events scheduled yet.</li>';
+    return;
+  }
 
   events.forEach(item => {
     const li = document.createElement('li');
@@ -327,42 +412,75 @@ function renderEvents() {
   });
 }
 
-// SHARE FUNCTIONS
-function sharePrayer(index, platform) {
-  const prayers = getFromLocalStorage('prayers');
-  const prayer = prayers[index];
-  if (!prayer) return;
-
-  const text = encodeURIComponent(`${prayer.name}: ${prayer.msg}`);
-  let url;
-  if (platform === 'facebook') {
-    url = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=${text}`;
-  } else if (platform === 'instagram') {
-    url = `https://www.instagram.com/?url=${window.location.href}&title=${text}`;
-  }
-  window.open(url, '_blank');
+// Check if user is admin
+function isAdmin() {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const adminUsers = getFromLocalStorage('adminUsers');
+  return adminUsers.some(admin => admin.email === currentUser.email);
 }
 
-function shareNeed(index, platform) {
-  const needs = getFromLocalStorage('needs');
-  const need = needs[index];
-  if (!need) return;
-
-  const text = encodeURIComponent(`${need.type.toUpperCase()} - ${need.name}: ${need.details}`);
-  let url;
-  if (platform === 'facebook') {
-    url = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=${text}`;
-  } else if (platform === 'instagram') {
-    url = `https://www.instagram.com/?url=${window.location.href}&title=${text}`;
+// Update pending count badge
+function updatePendingCount() {
+  const pending = getFromLocalStorage('pendingApprovals');
+  const badge = document.getElementById('pending-count');
+  if (badge) {
+    badge.textContent = pending.length;
+    badge.style.display = pending.length > 0 ? 'inline-block' : 'none';
   }
-  window.open(url, '_blank');
 }
 
 // LOAD PAGE DATA
 if (document.getElementById('ann-list')) renderAnnouncements();
 if (document.getElementById('prayer-list')) renderPrayers();
 if (document.getElementById('needs-list')) renderNeeds();
-if (document.getElementById('events-list')) {
-  initializeDefaultEvents();
-  renderEvents();
+if (document.getElementById('events-list')) renderEvents();
+
+// Update pending count on page load
+updatePendingCount();
+
+const chatBtn = document.getElementById('chat-button');
+const chatWidget = document.getElementById('chat-widget');
+const closeChatBtn = document.getElementById('close-chat');
+
+if (chatBtn && chatWidget && closeChatBtn) {
+  chatBtn.addEventListener('click', () => {
+    chatWidget.classList.add('open');
+  });
+
+  closeChatBtn.addEventListener('click', () => {
+    chatWidget.classList.remove('open');
+  });
+
+  // Optional: ESC key closes chat
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      chatWidget.classList.remove('open');
+    }
+  });
 }
+
+chatBtn.addEventListener('click', () => {
+  chatWidget.classList.add('open');
+  document.body.classList.add('chat-open');
+});
+
+closeChatBtn.addEventListener('click', () => {
+  chatWidget.classList.remove('open');
+  document.body.classList.remove('chat-open');
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const adminLink = document.querySelector('.admin-link');
+
+  if (!adminLink) return;
+
+  if (isAdmin()) {
+    adminLink.style.display = 'inline-block';
+  } else {
+    adminLink.style.display = 'none';
+  }
+});
+
+document.querySelectorAll('.admin-only').forEach(el => {
+  if (isAdmin()) el.style.display = 'block';
+});
