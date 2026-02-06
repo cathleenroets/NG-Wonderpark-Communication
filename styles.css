@@ -1257,7 +1257,3 @@ section {
   position: fixed;
   z-index: 10001 !important;
 }
-
-.admin-link {
-  display: none;
-}
