@@ -9,7 +9,7 @@ function checkAdminAuth() {
   if (adminUsers.length === 0) {
     adminUsers.push({
       email: 'cathleen.roets@gmail.com',
-      password: 'Viper6334', // In production, use proper password hashing
+      password: 'Viper6334', 
       role: 'admin'
     });
     saveToLocalStorage('adminUsers', adminUsers);
@@ -465,3 +465,16 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 if (document.getElementById('admin-panel')) {
   checkAdminAuth();
 }
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+const auth = getAuth();
+
+const adminEmails = ["cathleen.roets@gmail.com"];
+
+onAuthStateChanged(auth, (user) => {
+  if (!user || !adminEmails.includes(user.email)) {
+    alert("❌ Access denied. Admins only.");
+    window.location.href = "index.html";
+  }
+});
