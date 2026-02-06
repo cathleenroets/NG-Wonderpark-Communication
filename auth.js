@@ -28,25 +28,18 @@ const adminEmails = ["cathleen.roets@gmail.com"];
 
 // Update navbar based on auth state
 onAuthStateChanged(auth, (user) => {
-  const adminLink = document.querySelector("a.admin-link");
-const adminEmails = ["cathleen.roets@gmail.com"];
+  const authLinks = document.querySelector(".auth-links");
+  const adminLink = document.querySelector(".admin-link");
 
-if (adminLink) {
-  adminLink.style.display = "none";
-
-  if (user && adminEmails.includes(user.email)) {
-    adminLink.style.display = "inline-block";
-  }
-}
-
-  // Always hide admin link first
+  // Hide admin link by default
   if (adminLink) {
     adminLink.style.display = "none";
   }
 
   if (authLinks) {
     if (user) {
-      // Show admin link if email matches
+
+      // Show admin link if admin
       if (adminLink && adminEmails.includes(user.email)) {
         adminLink.style.display = "block";
       }
@@ -68,6 +61,7 @@ if (adminLink) {
           }
         });
       }
+
     } else {
       authLinks.innerHTML = `
         <a href="signin.html" class="btn-auth">Sign In</a>
@@ -131,11 +125,6 @@ if (signinForm) {
 
     if (!email || !password) {
       alert("⚠️ Please fill in all fields.");
-      return;
-    }
-
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      alert("⚠️ Please enter a valid email address.");
       return;
     }
 
