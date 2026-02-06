@@ -9,6 +9,42 @@
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </head>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCMQ2Scn4Bwe3LreQ3X9_6dCuEBK8cR2YI",
+    authDomain: "kerk-c847c.firebaseapp.com",
+    projectId: "kerk-c847c",
+    storageBucket: "kerk-c847c.firebasestorage.app",
+    messagingSenderId: "779898611341",
+    appId: "1:779898611341:web:75e7c2053520e1ba5c24c4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const adminEmails = ["cathleen.roets@gmail.com"];
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("⚠️ Please sign in first.");
+      window.location.href = "signin.html";
+      return;
+    }
+
+    if (!adminEmails.includes(user.email)) {
+      alert("⛔ Access denied. Admins only.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    console.log("✅ Admin access granted:", user.email);
+  });
+</script>
+  
 <body>
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="brand">Wonderpark community centre</a>
@@ -199,3 +235,4 @@
   <script src="admin.js"></script>
 </body>
 </html>
+
