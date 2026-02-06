@@ -28,8 +28,16 @@ const adminEmails = ["cathleen.roets@gmail.com"];
 
 // Update navbar based on auth state
 onAuthStateChanged(auth, (user) => {
-  const authLinks = document.querySelector(".auth-links");
-  const adminLink = document.querySelector(".admin-link");
+  const adminLink = document.querySelector("a.admin-link");
+const adminEmails = ["cathleen.roets@gmail.com"];
+
+if (adminLink) {
+  adminLink.style.display = "none";
+
+  if (user && adminEmails.includes(user.email)) {
+    adminLink.style.display = "inline-block";
+  }
+}
 
   // Always hide admin link first
   if (adminLink) {
